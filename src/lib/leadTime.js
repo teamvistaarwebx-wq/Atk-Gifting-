@@ -28,6 +28,17 @@ export function quoteOnlyLabel(bands) {
   return last ? `Above ${last.upTo} units` : "Any quantity";
 }
 
+// "about 45 days up to 20 units, about 75 days for 21–50 units"
+export function deliverySummary(settings) {
+  const bands = sortedBands(settings);
+  return bands
+    .map((b, i) => {
+      const range = i === 0 ? `up to ${b.upTo}` : `for ${bands[i - 1].upTo + 1}–${b.upTo}`;
+      return `about ${b.productionDays + settings.finishingDays} days ${range} units`;
+    })
+    .join(", ");
+}
+
 // Returns { quoteOnly: true } or { days, productionDays } for a quantity.
 export function deliveryFor(quantity, settings) {
   const bands = sortedBands(settings);

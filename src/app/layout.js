@@ -1,5 +1,6 @@
 import { Cormorant_Garamond, Fraunces, Urbanist } from "next/font/google";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 import QuoteForm from "@/components/QuoteForm";
 import Toasts from "@/components/Toasts";
 import HoldWatcher from "@/components/HoldWatcher";
@@ -31,6 +32,7 @@ export default function RootLayout({ children }) {
       <body className="min-h-full flex flex-col font-sans">
         <Header />
         <main className="flex-1">{children}</main>
+        <Footer />
         <QuoteForm />
         <Toasts />
         <HoldWatcher />

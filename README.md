@@ -13,7 +13,7 @@ npm run lint
 
 | Route | What it does |
 | --- | --- |
-| `/` | Landing: **Build a gift** (individual) or **Gift your team** (corporate) |
+| `/` | Landing: hero, gifting paths, thread-to-gift-box journey and craft clusters (both horizontal scrollers), impact, box contents, how it works, occasions, bulk gifting, FAQ |
 | `/corporate` | Festival + female/male staff count, then recommendations |
 | `/gifting` | In-stock catalogue (All / Women / Men, categories, sort). Floating **Gift Box** pill. **Made to Order** entry on the right |
 | `/gift-box` | Quantities, packaging, personalised card, summary, checkout or quote |
@@ -49,5 +49,7 @@ Lead time depends on quantity, not product. Defaults (`src/lib/leadTime.js`), ed
 | Above 50 units | — | Quote only, no date |
 
 ## Data
+
+Landing-page artisan content lives in `src/data/crafts.js` (craft clusters and the five journey stages); the line illustrations are in `public/artisans/`. Swap in ATK's own artisan profiles and photos there when available.
 
 There is no backend yet. Catalogue data lives in `src/data/`; the gift box, quote requests, orders and admin lead times are kept in `localStorage` through `src/lib/store.js`. Replace `load`/`persist` there with API calls when a backend is added. `/admin` has no login.

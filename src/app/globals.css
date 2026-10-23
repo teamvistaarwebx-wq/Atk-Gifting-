@@ -7,6 +7,8 @@
   --color-rose: #a85c68;
   --color-cream: #f8f1ea;
   --color-blush: #fbf4f3;
+  --color-petal: #f4eaeb; /* ground of the artisan line illustrations */
+  --color-ochre: #c9963f;
   --color-ink: #1c1917;
   --color-muted: #6b6461;
   --color-line: #e7e2df;
@@ -108,6 +110,59 @@ body {
     border: 1px solid var(--color-line);
     background: #fff;
     box-shadow: 0 2px 10px rgb(28 25 23 / 0.05);
+  }
+
+  /* Full-bleed horizontal scroller whose first card lines up with the page container */
+  .hscroll {
+    padding-inline: max(1rem, calc((100% - 76rem) / 2 + 1rem));
+    scroll-padding-inline: max(1rem, calc((100% - 76rem) / 2 + 1rem));
+    scrollbar-width: none;
+    cursor: grab;
+  }
+  .hscroll::-webkit-scrollbar {
+    display: none;
+  }
+  .hscroll:active {
+    cursor: grabbing;
+  }
+  .hscroll:focus-visible {
+    outline: 2px solid var(--color-maroon);
+    outline-offset: -2px;
+  }
+
+  /* Flip cards in the artisans section */
+  .flip {
+    perspective: 1400px;
+  }
+  .flip-inner {
+    position: relative;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .flip[data-flipped="true"] .flip-inner {
+    transform: rotateY(180deg);
+  }
+  .flip-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .flip-back {
+    transform: rotateY(180deg);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .flip-inner {
+      transition: none;
+    }
+  }
+
+  /* A loose thread running behind the journey illustrations */
+  .thread-line {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='24' viewBox='0 0 160 24'%3E%3Cpath d='M0 12 C40 0 40 24 80 12 S120 0 160 12' fill='none' stroke='%237a0a1e' stroke-opacity='0.35' stroke-width='1.4' stroke-dasharray='5 5'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-position: left center;
   }
 
   /* Hand-drawn toran border above the "Talk to us" banner */
