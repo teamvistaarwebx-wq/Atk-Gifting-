@@ -2,12 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "./Icons";
+import useDragScroll from "./useDragScroll";
 
 // Horizontally scrolling row: swipe, trackpad, keyboard, drag with the mouse,
 // or the arrow buttons. The thread under the row shows how far along you are.
 export default function HScroller({ header, label, children, tone = "light", trackClassName = "" }) {
   const track = useRef(null);
-  const drag = useRef(null);
   const [state, setState] = useState({ progress: 0, atStart: true, atEnd: false });
 
   useEffect(() => {
@@ -35,28 +35,7 @@ export default function HScroller({ header, label, children, tone = "light", tra
     el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: smooth ? "smooth" : "auto" });
   };
 
-  // Mouse drag-to-scroll; touch and trackpads scroll natively.
-  const onPointerDown = (e) => {
-    if (e.pointerType !== "mouse" || e.button !== 0) return;
-    drag.current = { x: e.clientX, left: track.current.scrollLeft, moved: false };
-  };
-  const onPointerMove = (e) => {
-    const d = drag.current;
-    if (!d) return;
-    const dx = e.clientX - d.x;
-    if (Math.abs(dx) > 4) d.moved = true;
-    if (d.moved) track.current.scrollLeft = d.left - dx;
-  };
-  const endDrag = () => {
-    const d = drag.current;
-    drag.current = null;
-    if (d?.moved) {
-      // Swallow the click that ends a drag so cards don't flip by accident.
-      const swallow = (ev) => ev.stopPropagation();
-      window.addEventListener("click", swallow, { capture: true, once: true });
-      setTimeout(() => window.removeEventListener("click", swallow, { capture: true }), 0);
-    }
-  };
+  const dragHandlers = useDragScroll(track);
 
   const dark = tone === "dark";
   const buttonClass = `grid h-11 w-11 place-items-center rounded-full border transition disabled:opacity-30 ${
@@ -82,10 +61,7 @@ export default function HScroller({ header, label, children, tone = "light", tra
         role="region"
         aria-label={label}
         tabIndex={0}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={endDrag}
-        onPointerLeave={endDrag}
+        {...dragHandlers}
         className={`hscroll mt-8 flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4 outline-none ${trackClassName}`}
       >
         {children}

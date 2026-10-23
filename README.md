@@ -50,6 +50,9 @@ Lead time depends on quantity, not product. Defaults (`src/lib/leadTime.js`), ed
 
 ## Data
 
-Landing-page artisan content lives in `src/data/crafts.js` (craft clusters and the five journey stages); the line illustrations are in `public/artisans/`. Swap in ATK's own artisan profiles and photos there when available.
+Landing-page artisan content:
+
+- `src/data/artisans.js` — the **Meet our artisans** carousel. Add each artisan to `PEOPLE` (name, crafts, photo in `public/artisans/`, a note per craft). Craft communities fill the rest of the carousel until all profiles are in.
+- `src/data/crafts.js` — craft clusters and the five thread-to-gift-box stages; line illustrations are in `public/artisans/`.
 
 There is no backend yet. Catalogue data lives in `src/data/`; the gift box, quote requests, orders and admin lead times are kept in `localStorage` through `src/lib/store.js`. Replace `load`/`persist` there with API calls when a backend is added. `/admin` has no login.

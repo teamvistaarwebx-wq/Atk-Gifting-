@@ -1,7 +1,7 @@
 import Hero from "@/components/home/Hero";
 import GiftingPaths from "@/components/home/GiftingPaths";
 import CraftJourney from "@/components/home/CraftJourney";
-import ArtisanCrafts from "@/components/home/ArtisanCrafts";
+import MeetArtisans from "@/components/home/MeetArtisans";
 import Impact from "@/components/home/Impact";
 import GiftBoxAnatomy from "@/components/home/GiftBoxAnatomy";
 import HowItWorks from "@/components/home/HowItWorks";
@@ -15,7 +15,7 @@ export default function Home() {
       <Hero />
       <GiftingPaths />
       <CraftJourney />
-      <ArtisanCrafts />
+      <MeetArtisans />
       <Impact />
       <GiftBoxAnatomy />
       <HowItWorks />
