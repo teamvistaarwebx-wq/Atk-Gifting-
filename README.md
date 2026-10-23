@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Atulya Karigari — Gifting
 
-## Getting Started
-
-First, run the development server:
+Next.js 16 (App Router) site for ATK gifting: individual gift boxes, corporate team gifting, Made to Order and quote requests.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev     # http://localhost:3000
+npm run build
+npm run lint
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Flow
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+| Route | What it does |
+| --- | --- |
+| `/` | Landing: hero, gifting paths, thread-to-gift-box journey and craft clusters (both horizontal scrollers), impact, box contents, how it works, occasions, bulk gifting, FAQ |
+| `/corporate` | Festival + female/male staff count, then recommendations |
+| `/gifting` | In-stock catalogue (All / Women / Men, categories, sort). Floating **Gift Box** pill. **Made to Order** entry on the right |
+| `/gift-box` | Quantities, packaging, personalised card, summary, checkout or quote |
+| `/checkout` → `/order-placed` | Direct payment for in-stock boxes |
+| `/made-to-order` | Made to Order catalogue: indicative unit price + quantity, **Request a quote** only |
+| `/admin` | Made to Order lead-time table (editable), quote requests, direct orders |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Lane A — in-stock, direct payment
 
-## Learn More
+- Anything in stock ships in **7–10 working days**, up to 50 pieces included.
+- Packaging boxes and printed cards must be in stock for the order's quantity (one box and card per piece for corporate orders); options without enough stock can't be chosen and checkout is blocked.
+- Personalised cards: the proof must be approved within **24 hours** to keep the dispatch window.
+- Items in the gift box are held for **15 minutes**; after that the hold is released. Pieces are only reserved once payment completes.
+- From **30 pieces** the buyer is steered to **Request a quote** (so ATK can hold the pieces). Direct checkout still works.
 
-To learn more about Next.js, take a look at the following resources:
+### Lane B — Request a quote
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+One form (`src/components/QuoteForm.js`) for every entry point, opened with `actions.openQuote(draft)`:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- From the gifting pages it opens blank (gift box contents are attached for context).
+- From a Made to Order product it opens with the product and quantity pre-filled.
 
-## Deploy on Vercel
+Fields include **quantity** and **required-by date**. Nothing is paid on the site: ATK calls the customer and sends a payment link for the advance.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Made to Order lead times
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Lead time depends on quantity, not product. Defaults (`src/lib/leadTime.js`), editable in `/admin`:
+
+| Quantity | Production | Customer sees (production + 15 days QC, packaging, card printing, dispatch) |
+| --- | --- | --- |
+| Up to 20 units | 30 days | About 45 days |
+| 21–50 units | 60 days | About 75 days |
+| Above 50 units | — | Quote only, no date |
+
+## Data
+
+Landing-page artisan content:
+
+- `src/data/artisans.js` — the **Meet our artisans** carousel. Add each artisan to `PEOPLE` (name, crafts, photo in `public/artisans/`, a note per craft). Craft communities fill the rest of the carousel until all profiles are in.
+- `src/data/crafts.js` — craft clusters and the five thread-to-gift-box stages; line illustrations are in `public/artisans/`.
+
+There is no backend yet. Catalogue data lives in `src/data/`; the gift box, quote requests, orders and admin lead times are kept in `localStorage` through `src/lib/store.js`. Replace `load`/`persist` there with API calls when a backend is added. `/admin` has no login.

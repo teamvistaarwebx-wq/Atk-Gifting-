@@ -1,26 +1,216 @@
 @import "tailwindcss";
 
+@theme inline {
+  --color-maroon: #7a0a1e;
+  --color-maroon-dark: #5e0716;
+  --color-maroon-soft: #c9939c;
+  --color-rose: #a85c68;
+  --color-cream: #f8f1ea;
+  --color-blush: #fbf4f3;
+  --color-petal: #f4eaeb; /* ground of the artisan line illustrations */
+  --color-ochre: #c9963f;
+  --color-ink: #1c1917;
+  --color-muted: #6b6461;
+  --color-line: #e7e2df;
+  --color-butter: #f8e3a1;
+  --font-sans: var(--font-urbanist);
+  --font-serif: var(--font-fraunces);
+  --font-logo: var(--font-cormorant);
+}
+
 :root {
   --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --foreground: #1c1917;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer components {
+  .container-atk {
+    width: 100%;
+    max-width: 76rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.375rem;
+    background: var(--color-maroon);
+    color: #fff;
+    padding: 0.75rem 1.25rem;
+    font-weight: 500;
+    transition: background 150ms;
+  }
+  .btn-primary:hover {
+    background: var(--color-maroon-dark);
+  }
+  .btn-primary:disabled {
+    background: var(--color-maroon-soft);
+    cursor: not-allowed;
+  }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 0.375rem;
+    border: 1px solid var(--color-maroon);
+    color: var(--color-maroon);
+    background: #fff;
+    padding: 0.75rem 1.25rem;
+    transition: background 150ms;
+  }
+  .btn-outline:hover {
+    background: var(--color-blush);
+  }
+  .btn-outline:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .field {
+    width: 100%;
+    border-radius: 0.375rem;
+    border: 1px solid var(--color-line);
+    background: var(--color-blush);
+    padding: 0.7rem 0.85rem;
+    font-size: 0.95rem;
+    outline: none;
+  }
+  .field:focus {
+    border-color: var(--color-maroon);
+    background: #fff;
+  }
+
+  .label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.85rem;
+    color: var(--color-ink);
+  }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .panel {
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-line);
+    background: #fff;
+    box-shadow: 0 2px 10px rgb(28 25 23 / 0.05);
+  }
+
+  .is-dragging {
+    scroll-snap-type: none !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Full-bleed horizontal scroller whose first card lines up with the page container */
+  .hscroll {
+    padding-inline: max(1rem, calc((100% - 76rem) / 2 + 1rem));
+    scroll-padding-inline: max(1rem, calc((100% - 76rem) / 2 + 1rem));
+    scrollbar-width: none;
+    cursor: grab;
+  }
+  .hscroll::-webkit-scrollbar {
+    display: none;
+  }
+  .hscroll:active {
+    cursor: grabbing;
+  }
+  .hscroll:focus-visible {
+    outline: 2px solid var(--color-maroon);
+    outline-offset: -2px;
+  }
+
+  /* "Meet our artisans": snap each card to the centre, first and last included */
+  .artisan-track {
+    --card-w: 15.5rem;
+    padding-inline: calc(50% - var(--card-w) / 2);
+    scrollbar-width: none;
+    cursor: grab;
+  }
+  .artisan-track::-webkit-scrollbar {
+    display: none;
+  }
+  .artisan-track:active {
+    cursor: grabbing;
+  }
+  .artisan-track:focus-visible {
+    outline: 2px solid var(--color-maroon);
+    outline-offset: -2px;
+  }
+  .artisan-slot {
+    width: var(--card-w);
+  }
+  @media (min-width: 640px) {
+    .artisan-track {
+      --card-w: 18rem;
+    }
+  }
+
+  /* Cards grow in as they slide into the row (browsers with scroll-driven animations) */
+  @supports (animation-timeline: view()) {
+    .artisan-card-inner {
+      animation: artisan-in linear both;
+      animation-timeline: view(inline);
+      animation-range: entry 0% cover 35%;
+    }
+  }
+  @keyframes artisan-in {
+    from {
+      opacity: 0.35;
+      transform: scale(0.88) rotate(-2deg);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .artisan-profile {
+    animation: profile-in 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  @keyframes profile-in {
+    from {
+      opacity: 0;
+      transform: translateY(24px) scale(0.98);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .artisan-card,
+    .artisan-card-inner,
+    .artisan-profile {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  /* A loose thread running behind the journey illustrations */
+  .thread-line {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='24' viewBox='0 0 160 24'%3E%3Cpath d='M0 12 C40 0 40 24 80 12 S120 0 160 12' fill='none' stroke='%237a0a1e' stroke-opacity='0.35' stroke-width='1.4' stroke-dasharray='5 5'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-position: left center;
+  }
+
+  /* Hand-drawn toran border above the "Talk to us" banner */
+  .festoon {
+    height: 32px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='32' viewBox='0 0 48 32'%3E%3Cpath d='M0 10 Q12 22 24 10 T48 10' fill='none' stroke='%237a0a1e' stroke-width='2.2'/%3E%3Ccircle cx='12' cy='24' r='2.6' fill='%237a0a1e'/%3E%3Ccircle cx='36' cy='6' r='1.8' fill='%237a0a1e'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-position: center;
+  }
 }
